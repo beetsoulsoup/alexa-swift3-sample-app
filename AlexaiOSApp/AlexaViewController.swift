@@ -119,7 +119,7 @@ class AlexaViewController: UIViewController, AVAudioPlayerDelegate, AVAudioRecor
         }
     }
     
-    func startListening() {
+    @objc func startListening() {
         
         audioRecorder.record(forDuration: 1.0)
     }
@@ -217,7 +217,7 @@ class AlexaViewController: UIViewController, AVAudioPlayerDelegate, AVAudioRecor
         }
     }
     
-    func timerStart() {
+    @objc func timerStart() {
         print("Timer is triggered")
         DispatchQueue.main.async { () -> Void in
             self.infoLabel.text = "Time is up!"
@@ -228,11 +228,23 @@ class AlexaViewController: UIViewController, AVAudioPlayerDelegate, AVAudioRecor
         
         let file = try! AVAudioFile(forReading: snowboyTempSoundFileURL)
         let format = AVAudioFormat(commonFormat: .pcmFormatFloat32, sampleRate: 16000.0, channels: 1, interleaved: false)
-        let buffer = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: AVAudioFrameCount(file.length))
-        try! file.read(into: buffer)
-        let array = Array(UnsafeBufferPointer(start: buffer.floatChannelData![0], count:Int(buffer.frameLength)))
+        let buffer = AVAudioPCMBuffer(pcmFormat: format!, frameCapacity: AVAudioFrameCount(file.length))
+        try! file.read(into: buffer!)
+        //let cnt = Int(buffer?.frameLength)
+        var array:Array<Float> = Array()
+        if let cnt = buffer?.frameLength {
+            array = Array(UnsafeBufferPointer(start: buffer?.floatChannelData![0], count: Int(cnt)))
+        } else {
+            array = Array(UnsafeBufferPointer(start: buffer?.floatChannelData![0], count: Int(20)))
+        }
         
-        let result = snowboy.runDetection(array, length: Int32(buffer.frameLength))
+        var result:Int32 = 0
+        if let cnt = buffer?.frameLength {
+            result = snowboy.runDetection(array, length: Int32(cnt))
+        } else {
+            result = snowboy.runDetection(array, length: Int32(20))
+        }
+     
         print("Snowboy result: \(result)")
         
         // Wake word matches
@@ -253,7 +265,7 @@ class AlexaViewController: UIViewController, AVAudioPlayerDelegate, AVAudioRecor
         }
     }
     
-    func checkAudioMetering() {
+    @objc func checkAudioMetering() {
         
         audioRecorder.updateMeters()
         let power = audioRecorder.averagePower(forChannel: 0)
