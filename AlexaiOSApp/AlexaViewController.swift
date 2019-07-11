@@ -8,9 +8,12 @@
 
 import UIKit
 import AVFoundation
+import SceneKit
+import ARKit
 
-class AlexaViewController: UIViewController, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
+class AlexaViewController: UIViewController, AVAudioPlayerDelegate, AVAudioRecorderDelegate, ARSCNViewDelegate {
     
+    @IBOutlet var sceneView: ARSCNView!
     @IBOutlet weak var infoLabel: UILabel!
     @IBOutlet weak var pingBtn: UIButton!
     @IBOutlet weak var startDownchannelBtn: UIButton!
@@ -30,9 +33,14 @@ class AlexaViewController: UIViewController, AVAudioPlayerDelegate, AVAudioRecor
     private var snowboyTempSoundFileURL: URL!
     private var stopCaptureTimer: Timer!
     private var isListening = false
+    
+    var grids = [Grid]()
+    var imageNodes = [SCNNode]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        // Set the view's delegate
+        sceneView.delegate = self
         
         snowboy = SnowboyWrapper(resources: Settings.WakeWord.RESOURCE, modelStr: Settings.WakeWord.MODEL)
         snowboy.setSensitivity(Settings.WakeWord.SENSITIVITY)
@@ -42,6 +50,20 @@ class AlexaViewController: UIViewController, AVAudioPlayerDelegate, AVAudioRecor
         avsClient.syncHandler = self.syncHandler
         avsClient.directiveHandler = self.directiveHandler
         avsClient.downchannelHandler = self.downchannelHandler
+        
+        // AR view
+        
+        
+        // Show statistics such as fps and timing information
+        sceneView.showsStatistics = true
+        sceneView.debugOptions = ARSCNDebugOptions.showFeaturePoints
+        let scene = SCNScene()
+        sceneView.scene = scene
+        //self.chompPlayer = self.loadSound(filename: "chomp")
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tappednew))
+        print("Hello there")
+        print(tapGesture)
+        sceneView.addGestureRecognizer(tapGesture)
     }
     
     @IBAction func onClickPingBtn(_ sender: Any) {
@@ -235,14 +257,14 @@ class AlexaViewController: UIViewController, AVAudioPlayerDelegate, AVAudioRecor
         if let cnt = buffer?.frameLength {
             array = Array(UnsafeBufferPointer(start: buffer?.floatChannelData![0], count: Int(cnt)))
         } else {
-            array = Array(UnsafeBufferPointer(start: buffer?.floatChannelData![0], count: Int(20)))
+            array = Array(UnsafeBufferPointer(start: buffer?.floatChannelData![0], count: Int(20000)))
         }
         
         var result:Int32 = 0
         if let cnt = buffer?.frameLength {
             result = snowboy.runDetection(array, length: Int32(cnt))
         } else {
-            result = snowboy.runDetection(array, length: Int32(20))
+            result = snowboy.runDetection(array, length: Int32(20000))
         }
      
         print("Snowboy result: \(result)")
@@ -309,6 +331,119 @@ class AlexaViewController: UIViewController, AVAudioPlayerDelegate, AVAudioRecor
 
     func audioRecorderEncodeErrorDidOccur(_ recorder: AVAudioRecorder, error: Error?) {
         print("Audio recorder has an error: \(String(describing: error?.localizedDescription))")
+    }
+    
+    @objc
+    func tappednew(_ gesture: UITapGestureRecognizer) {
+        print("size")
+        print(self.imageNodes.count)
+        if self.imageNodes.count > 0 {
+            self.imageNodes[self.imageNodes.count-1].removeFromParentNode()
+        }
+        //self.chompPlayer?.play()
+        // Get 2D position of touch event on screen
+        let touchPosition = gesture.location(in: sceneView)
+        
+        // Translate those 2D points to 3D points using hitTest (existing plane)
+        let hitTestResults = sceneView.hitTest(touchPosition, types: .existingPlaneUsingExtent)
+        
+        // Get hitTest results and ensure that the hitTest corresponds to a grid that has been placed on a wall
+        guard let hitTest = hitTestResults.first, let anchor = hitTest.anchor as? ARPlaneAnchor, let gridIndex = self.grids.index(where: { $0.anchor == anchor }) else {
+            return
+        }
+        self.imageNodes.append(addPainting(hitTest, self.grids[gridIndex]))
+    }
+    
+    func addPainting(_ hitResult: ARHitTestResult, _ grid: Grid) -> SCNNode {
+        // 1.
+        let planeGeometry = SCNPlane(width: 0.1, height: 0.25)
+        let material = SCNMaterial()
+        guard let url = Bundle.main.url(forResource: "chair_swan", withExtension: "usdz")
+            else {
+                fatalError()
+        }
+        //let url = URL(string: "http://i.imgur.com/w5rkSIj.jpg")
+        // Use  for url string let url = URL(string: "http://i.imgur.com/w5rkSIj.jpg")
+        
+        let data = try? Data(contentsOf: url)
+        if let imageData = data {
+            let image = UIImage(data: imageData)
+            material.diffuse.contents = image//UIImage(string: url)
+            planeGeometry.materials = [material]
+        }
+        
+        // 2.
+        let paintingNode = SCNNode(geometry: planeGeometry)
+        paintingNode.transform = SCNMatrix4(hitResult.anchor!.transform)
+        paintingNode.eulerAngles = SCNVector3(paintingNode.eulerAngles.x + (-Float.pi / 2), paintingNode.eulerAngles.y, paintingNode.eulerAngles.z)
+        paintingNode.position = SCNVector3(hitResult.worldTransform.columns.3.x, hitResult.worldTransform.columns.3.y, hitResult.worldTransform.columns.3.z)
+        
+        sceneView.scene.rootNode.addChildNode(paintingNode)
+        
+        grid.removeFromParentNode()
+        return paintingNode
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        // Create a session configuration
+        let configuration = ARWorldTrackingConfiguration()
+        
+        // Enable horizontal plane detection
+        configuration.planeDetection = .horizontal
+        
+        // show Feature Points
+        sceneView.debugOptions = [ARSCNDebugOptions.showFeaturePoints]
+        
+        // Run the view's session
+        sceneView.session.run(configuration)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        // Pause the view's session
+        sceneView.session.pause()
+    }
+    
+    func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
+        
+        /** if let planeAnchor = anchor as? ARPlaneAnchor {
+         
+         let plane = SCNPlane(width: CGFloat(planeAnchor.extent.x), height: CGFloat(planeAnchor.extent.z))
+         plane.firstMaterial?.diffuse.contents = UIColor(white: 1, alpha: 0.75)
+         
+         let planeNode = SCNNode(geometry: plane)
+         planeNode.position = SCNVector3Make(planeAnchor.center.x, planeAnchor.center.x, planeAnchor.center.z)
+         planeNode.eulerAngles.x = -.pi / 2
+         
+         node.addChildNode(planeNode)
+         } **/
+        guard let planeAnchor = anchor as? ARPlaneAnchor, planeAnchor.alignment == .horizontal else { return }
+        let grid = Grid(anchor: planeAnchor)
+        self.grids.append(grid)
+        node.addChildNode(grid)
+    }
+    
+    func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
+        /**if let planeAnchor = anchor as? ARPlaneAnchor,
+         let planeNode = node.childNodes.first,
+         let plane = planeNode.geometry as? SCNPlane {
+         plane.width = CGFloat(planeAnchor.extent.x)
+         plane.height = CGFloat(planeAnchor.extent.z)
+         planeNode.position = SCNVector3Make(planeAnchor.center.x, 0, planeAnchor.center.z)
+         }**/
+        guard let planeAnchor = anchor as? ARPlaneAnchor, planeAnchor.alignment == .horizontal else { return }
+        let grid = self.grids.filter { grid in
+            return grid.anchor.identifier == planeAnchor.identifier
+            }.first
+        
+        guard let foundGrid = grid else {
+            return
+        }
+        
+        foundGrid.update(anchor: planeAnchor)
     }
 }
 

@@ -20,7 +20,7 @@ class AlexaVoiceServiceClient : NSObject, URLSessionDelegate, URLSessionDataDele
     
     let PING_ENDPOINT: String = "https://avs-alexa-na.amazon.com/ping"
     let DIRECTIVES_ENDPOINT = "https://avs-alexa-na.amazon.com/v20160207/directives"
-    let EVENTS_ENDPOINT: String = "https://avs-alexa-na.amazon.com/v20160207/events"
+    let EVENTS_ENDPOINT: String = "https://alexa.na.gateway.devices.a2z.com/v20160207/events"
     
     let TIMEOUT = 3600 // 60 minutes per AVS recommendation
     let BOUNDARY_TERM = "CUSTOM_BOUNDARY_TERM"

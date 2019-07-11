@@ -37,7 +37,7 @@ class HomeViewController: UIViewController, AIAuthenticationDelegate {
             print("Login successfully!")
             LoginWithAmazonToken.sharedInstance.loginWithAmazonToken = apiResult.result as! String?
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            let controller = storyboard.instantiateViewController(withIdentifier: "AlexaViewController")
+            let controller = storyboard.instantiateViewController(withIdentifier: "ViewController")
             self.present(controller, animated: true, completion: nil)
         case API.clearAuthorizationState:
             print("Logout successfully!")
