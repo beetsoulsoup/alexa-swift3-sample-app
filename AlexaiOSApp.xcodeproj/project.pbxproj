@@ -27,6 +27,11 @@
 		04A201801E5A2F1E00197FE3 /* LoginWithAmazonToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04A2017F1E5A2F1E00197FE3 /* LoginWithAmazonToken.swift */; };
 		04AD929C1E58B012001B1BEB /* AlexaVoiceServiceClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04AD929B1E58B012001B1BEB /* AlexaVoiceServiceClient.swift */; };
 		04FE18C21E50E27A00326FA2 /* AlexaViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FE18C11E50E27A00326FA2 /* AlexaViewController.swift */; };
+		4B241DD022D7E936007318CE /* 10.png in Resources */ = {isa = PBXBuildFile; fileRef = 4B241DCC22D7E935007318CE /* 10.png */; };
+		4B241DD122D7E936007318CE /* 04.png in Resources */ = {isa = PBXBuildFile; fileRef = 4B241DCD22D7E935007318CE /* 04.png */; };
+		4B241DD222D7E936007318CE /* 02.png in Resources */ = {isa = PBXBuildFile; fileRef = 4B241DCE22D7E935007318CE /* 02.png */; };
+		4B241DD322D7E936007318CE /* 01.png in Resources */ = {isa = PBXBuildFile; fileRef = 4B241DCF22D7E936007318CE /* 01.png */; };
+		4B241DD522D7E9BA007318CE /* 05.png in Resources */ = {isa = PBXBuildFile; fileRef = 4B241DD422D7E9BA007318CE /* 05.png */; };
 		96838D4222D7A4D500EB8277 /* Grid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96838D4122D7A4D500EB8277 /* Grid.swift */; };
 		96838D4422D7A93000EB8277 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96838D4322D7A93000EB8277 /* ViewController.swift */; };
 		96838D4B22D7AFFF00EB8277 /* overlay_grid.png in Resources */ = {isa = PBXBuildFile; fileRef = 96838D4922D7AFFE00EB8277 /* overlay_grid.png */; };
@@ -62,6 +67,11 @@
 		04AD929B1E58B012001B1BEB /* AlexaVoiceServiceClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlexaVoiceServiceClient.swift; sourceTree = "<group>"; };
 		04FE18C11E50E27A00326FA2 /* AlexaViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlexaViewController.swift; sourceTree = "<group>"; };
 		4B241DCA22D7D302007318CE /* chomp.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = chomp.caf; sourceTree = "<group>"; };
+		4B241DCC22D7E935007318CE /* 10.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 10.png; sourceTree = "<group>"; };
+		4B241DCD22D7E935007318CE /* 04.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 04.png; sourceTree = "<group>"; };
+		4B241DCE22D7E935007318CE /* 02.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 02.png; sourceTree = "<group>"; };
+		4B241DCF22D7E936007318CE /* 01.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 01.png; sourceTree = "<group>"; };
+		4B241DD422D7E9BA007318CE /* 05.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 05.png; sourceTree = "<group>"; };
 		96838D4122D7A4D500EB8277 /* Grid.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Grid.swift; sourceTree = "<group>"; };
 		96838D4322D7A93000EB8277 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		96838D4922D7AFFE00EB8277 /* overlay_grid.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = overlay_grid.png; sourceTree = "<group>"; };
@@ -109,6 +119,7 @@
 		045773A61E4FB25900A5F558 /* AlexaiOSApp */ = {
 			isa = PBXGroup;
 			children = (
+				4B241DCB22D7E8BB007318CE /* resources */,
 				4B241DCA22D7D302007318CE /* chomp.caf */,
 				96838D4D22D7B02500EB8277 /* chair_swan.usdz */,
 				96838D4A22D7AFFF00EB8277 /* mona-lisa.jpg */,
@@ -157,6 +168,18 @@
 				046AD22B1E95C5D90093749A /* AlexaiOSApp-Bridging-Header.h */,
 			);
 			name = Snowboy;
+			sourceTree = "<group>";
+		};
+		4B241DCB22D7E8BB007318CE /* resources */ = {
+			isa = PBXGroup;
+			children = (
+				4B241DD422D7E9BA007318CE /* 05.png */,
+				4B241DCF22D7E936007318CE /* 01.png */,
+				4B241DCE22D7E935007318CE /* 02.png */,
+				4B241DCD22D7E935007318CE /* 04.png */,
+				4B241DCC22D7E935007318CE /* 10.png */,
+			);
+			name = resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -221,13 +244,18 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4B241DD522D7E9BA007318CE /* 05.png in Resources */,
 				045773B51E4FB25900A5F558 /* LaunchScreen.storyboard in Resources */,
 				96838D4B22D7AFFF00EB8277 /* overlay_grid.png in Resources */,
 				96838D5022D7BABA00EB8277 /* alexa_02092017.umdl in Resources */,
 				045773B21E4FB25900A5F558 /* Assets.xcassets in Resources */,
 				96838D4C22D7AFFF00EB8277 /* mona-lisa.jpg in Resources */,
+				4B241DD122D7E936007318CE /* 04.png in Resources */,
+				4B241DD322D7E936007318CE /* 01.png in Resources */,
+				4B241DD022D7E936007318CE /* 10.png in Resources */,
 				045773AD1E4FB25900A5F558 /* Main.storyboard in Resources */,
 				046AD23F1E9686A10093749A /* common.res in Resources */,
+				4B241DD222D7E936007318CE /* 02.png in Resources */,
 				96838D4E22D7B02500EB8277 /* chair_swan.usdz in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

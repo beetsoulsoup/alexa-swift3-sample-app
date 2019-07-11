@@ -28,6 +28,8 @@ class ViewController: UIViewController,AVAudioPlayerDelegate, AVAudioRecorderDel
     private var snowboyTimer: Timer!
     private var snowboyTempSoundFileURL: URL!
     private var stopCaptureTimer: Timer!
+    
+    private var imageURL:UIImageView!
 
     
     var grids = [Grid]()
@@ -69,7 +71,7 @@ class ViewController: UIViewController,AVAudioPlayerDelegate, AVAudioRecorderDel
         welcomeText.fontColor = SKColor.blue
         **/
         
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tappednew))
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTap))
        
         sceneView.addGestureRecognizer(tapGesture)
         
@@ -163,15 +165,81 @@ class ViewController: UIViewController,AVAudioPlayerDelegate, AVAudioRecorderDel
         self.sceneView.scene.rootNode.addChildNode(tvPlaneNode)
     }**/
     
-    func addItemToPosition(_ position: SCNVector3) {
-        let scene = SCNScene(named: "art.scnassets/ship.scn")
+    //Add text string
+    func imageWith(name: String?) -> UIImage? {
         
-        DispatchQueue.main.async {
-            if let node = scene?.rootNode.childNode(withName: "ship", recursively: false) {
-                node.position = position
-                self.sceneView.scene.rootNode.addChildNode(node)
+        let frame = CGRect(x: 0, y: 0, width: 100, height: 100)
+        let nameLabel = UILabel(frame: frame)
+        nameLabel.textAlignment = .center
+        nameLabel.backgroundColor = .lightGray
+        nameLabel.textColor = .white
+        nameLabel.font = UIFont.boldSystemFont(ofSize: 40)
+        nameLabel.text = name
+        UIGraphicsBeginImageContext(frame.size)
+        if let currentContext = UIGraphicsGetCurrentContext() {
+            nameLabel.layer.render(in: currentContext)
+            let nameImage = UIGraphicsGetImageFromCurrentImageContext()
+            return nameImage
+        }
+        return nil
+    }
+    
+    func addItemToPosition(_ position: SCNVector3, _ touchCoordinates: CGPoint) {
+        //let scene = SCNScene(named: "art.scnassets/1.jpg")
+        //let image = imageWith(name: "Text")
+        //fetch image from url
+        
+        var bottomImage:UIImage!
+        if let url = NSURL(string: "https://i5.wal.co/asr/07d325dc-fb42-4bf6-8f4f-2216c8f212d3_1.f37c57e8e7f730446d61017c1ed7e666.jpeg-31135b62c2c5bb63013bceff884c88ac42f3ee5d-optim-180x180.jpg") {
+            if let data = NSData(contentsOf: url as URL) {
+                bottomImage = UIImage(data: data as Data)
             }
         }
+        let topImage = imageWith(name: "Text")
+        
+        
+        let size = CGSize(width: topImage!.size.width, height: topImage!.size.height + bottomImage!.size.height)
+        UIGraphicsBeginImageContextWithOptions(size, false, 0.0)
+        
+        topImage!.draw(in: CGRect(x: 0, y: 0, width: size.width, height: topImage!.size.height))
+        bottomImage!.draw(in: CGRect(x: 0, y: topImage!.size.height, width: size.width, height: bottomImage!.size.height))
+        
+        let newImage:UIImage = UIGraphicsGetImageFromCurrentImageContext()!
+        UIGraphicsEndImageContext()
+        
+        DispatchQueue.main.async {
+            self.imageURL = UIImageView(image: newImage)
+            self.imageURL.frame = CGRect(x: touchCoordinates.x, y: touchCoordinates.y, width: 100, height: 100)
+            //delete previous image
+            let previous = self.view.subviews
+            if(previous.count > 1) {
+                let lastView = previous[previous.count-1]
+                lastView.removeFromSuperview()
+            }
+            self.view.addSubview(self.imageURL)
+            
+        }
+        //usdz is not working properly
+        //guard let url = Bundle.main.url(forResource: "duo_plus", withExtension: "usdz") else { fatalError() }
+        //let mdlAsset = MDLAsset(url: url)
+        //let scene = SCNScene(mdlAsset: mdlAsset)
+        
+        //SCN images work
+        /**
+         let scene = SCNScene(named: "art.scnassets/ship.scn")
+         DispatchQueue.main.async {
+         if let node = scene?.rootNode.childNode(withName: "ship", recursively: false) {
+         node.position = position
+         self.sceneView.scene.rootNode.addChildNode(node)
+         }
+         }**/
+        /**
+         if let node = scene?.rootNode.childNode(withName: "1", recursively: false) {
+         node.position = position
+         self.sceneView.scene.rootNode.addChildNode(node)
+         print(node.position)
+         }**/
+        
     }
     
     @objc
@@ -188,7 +256,7 @@ class ViewController: UIViewController,AVAudioPlayerDelegate, AVAudioRecorderDel
                                   hitTestResult.worldTransform.columns.3.y,
                                   hitTestResult.worldTransform.columns.3.z)
         
-        addItemToPosition(position)
+        addItemToPosition(position, touchCoordinates)
     }
     
    
