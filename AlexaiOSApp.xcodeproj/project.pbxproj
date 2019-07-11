@@ -61,6 +61,7 @@
 		04A2017F1E5A2F1E00197FE3 /* LoginWithAmazonToken.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginWithAmazonToken.swift; sourceTree = "<group>"; };
 		04AD929B1E58B012001B1BEB /* AlexaVoiceServiceClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlexaVoiceServiceClient.swift; sourceTree = "<group>"; };
 		04FE18C11E50E27A00326FA2 /* AlexaViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlexaViewController.swift; sourceTree = "<group>"; };
+		4B241DCA22D7D302007318CE /* chomp.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = chomp.caf; sourceTree = "<group>"; };
 		96838D4122D7A4D500EB8277 /* Grid.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Grid.swift; sourceTree = "<group>"; };
 		96838D4322D7A93000EB8277 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		96838D4922D7AFFE00EB8277 /* overlay_grid.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = overlay_grid.png; sourceTree = "<group>"; };
@@ -108,6 +109,7 @@
 		045773A61E4FB25900A5F558 /* AlexaiOSApp */ = {
 			isa = PBXGroup;
 			children = (
+				4B241DCA22D7D302007318CE /* chomp.caf */,
 				96838D4D22D7B02500EB8277 /* chair_swan.usdz */,
 				96838D4A22D7AFFF00EB8277 /* mona-lisa.jpg */,
 				96838D4922D7AFFE00EB8277 /* overlay_grid.png */,
@@ -189,7 +191,7 @@
 				TargetAttributes = {
 					045773A31E4FB25900A5F558 = {
 						CreatedOnToolsVersion = 8.2.1;
-						DevelopmentTeam = K84HTAKXA4;
+						DevelopmentTeam = 8VXZ74L4BY;
 						LastSwiftMigration = 0920;
 						ProvisioningStyle = Automatic;
 					};
@@ -390,7 +392,7 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = K84HTAKXA4;
+				DEVELOPMENT_TEAM = 8VXZ74L4BY;
 				ENABLE_BITCODE = NO;
 				EXCLUDED_RECURSIVE_SEARCH_PATH_SUBDIRECTORIES = "*.nib *.lproj *.framework *.gch *.xcode* *.xcassets (*) .DS_Store CVS .svn .git .hg *.pbproj *.pbxproj";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -413,7 +415,7 @@
 					"$(PROJECT_DIR)/../",
 					"$(PROJECT_DIR)/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = shiying06.AlexaiOSApp;
+				PRODUCT_BUNDLE_IDENTIFIER = "shiying06.AlexaiOSApp-1";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = YES;
 				SWIFT_INCLUDE_PATHS = "";
@@ -436,7 +438,7 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = K84HTAKXA4;
+				DEVELOPMENT_TEAM = 8VXZ74L4BY;
 				ENABLE_BITCODE = NO;
 				EXCLUDED_RECURSIVE_SEARCH_PATH_SUBDIRECTORIES = "*.nib *.lproj *.framework *.gch *.xcode* *.xcassets (*) .DS_Store CVS .svn .git .hg *.pbproj *.pbxproj";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -459,7 +461,7 @@
 					"$(PROJECT_DIR)/../",
 					"$(PROJECT_DIR)/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = shiying06.AlexaiOSApp;
+				PRODUCT_BUNDLE_IDENTIFIER = "shiying06.AlexaiOSApp-1";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = YES;
 				SWIFT_INCLUDE_PATHS = "";

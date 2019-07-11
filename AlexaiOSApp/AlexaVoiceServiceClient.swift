@@ -2,8 +2,6 @@
 //  AlexaVoiceServiceClient.swift
 //  Alexa iOS App
 //
-//  Created by Sheng Bi on 2/18/17.
-//  Copyright © 2017 Sheng Bi. All rights reserved.
 //
 //  This client uses HTTP/2 and API v20160207
 //  Ref: https://developer.amazon.com/public/solutions/alexa/alexa-voice-service/content/avs-api-overview
@@ -21,6 +19,7 @@ class AlexaVoiceServiceClient : NSObject, URLSessionDelegate, URLSessionDataDele
     let PING_ENDPOINT: String = "https://avs-alexa-na.amazon.com/ping"
     let DIRECTIVES_ENDPOINT = "https://avs-alexa-na.amazon.com/v20160207/directives"
     let EVENTS_ENDPOINT: String = "https://alexa.na.gateway.devices.a2z.com/v20160207/events"
+    let GUI_ENDPOINT: String = "https://pitangui.amazon.com/api/cards?limit=1"
     
     let TIMEOUT = 3600 // 60 minutes per AVS recommendation
     let BOUNDARY_TERM = "CUSTOM_BOUNDARY_TERM"
@@ -162,6 +161,35 @@ class AlexaVoiceServiceClient : NSObject, URLSessionDelegate, URLSessionDataDele
                 }
             }
         }).resume()
+    }
+    
+    func sendGUIPostRequest() {
+        
+        var request = URLRequest(url: URL(string: GUI_ENDPOINT)!)
+        request.httpMethod = "POST"
+        request.timeoutInterval = TimeInterval(TIMEOUT)
+        addAuthHeader(request: &request)
+        addContentTypeHeader(request: &request)
+    
+        
+        let task = session.dataTask(with: request) { (data:Data?, response:URLResponse?, error:Error?) -> Void in
+            if (error != nil) {
+                print("Send gui request error: \(String(describing: error?.localizedDescription))")
+            } else {
+                let res = response as! HTTPURLResponse
+                print("Send gui request status code: \(res.statusCode)")
+                
+                if (res.statusCode >= 200 && res.statusCode <= 299) {
+                    
+                    if let data = data, let dataString = String(data: data, encoding: .utf8) {
+                        print("data: \(dataString)")
+                    } else {
+                        print("Content type in response is empty")
+                    }
+                }
+            }
+        }
+        task.resume()
     }
     
     func sendEvent(namespace: String, name: String, token: String) {

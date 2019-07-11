@@ -10,6 +10,7 @@ import UIKit
 import SceneKit
 import ARKit
 import AVFoundation
+import SceneKit.ModelIO
 
 class ViewController: UIViewController,AVAudioPlayerDelegate, AVAudioRecorderDelegate, ARSCNViewDelegate {
 
@@ -18,6 +19,7 @@ class ViewController: UIViewController,AVAudioPlayerDelegate, AVAudioRecorderDel
     private let audioSession = AVAudioSession.sharedInstance()
     private var audioRecorder: AVAudioRecorder!
     private var audioPlayer: AVAudioPlayer!
+    private var soundPlayer: AVAudioPlayer!
    
     private var avsClient = AlexaVoiceServiceClient()
     private var speakToken: String?
@@ -29,11 +31,11 @@ class ViewController: UIViewController,AVAudioPlayerDelegate, AVAudioRecorderDel
 
     
     var grids = [Grid]()
-    var chompPlayer:AVAudioPlayer? = nil
+    //var chompPlayer:AVAudioPlayer? = nil
     var imageNodes = [SCNNode]()
     
     
-    /*
+    /* Load sound from file */
     func loadSound(filename: String) -> AVAudioPlayer {
         let url = Bundle.main.url(forResource: filename, withExtension: "caf")
         
@@ -46,7 +48,7 @@ class ViewController: UIViewController,AVAudioPlayerDelegate, AVAudioRecorderDel
         }
         return player
     }
- */
+ 
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -59,10 +61,16 @@ class ViewController: UIViewController,AVAudioPlayerDelegate, AVAudioRecorderDel
         sceneView.debugOptions = ARSCNDebugOptions.showFeaturePoints
         let scene = SCNScene()
         sceneView.scene = scene
-        //self.chompPlayer = self.loadSound(filename: "chomp")
+        self.soundPlayer = self.loadSound(filename: "chomp")
+        /**
+        let welcomeText = SKLabelNode(fontNamed:"Chalkduster")
+        welcomeText.text = "Welcome to ARlexa!"
+        welcomeText.fontSize = 65
+        welcomeText.fontColor = SKColor.blue
+        **/
+        
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tappednew))
-        print("Hello there")
-        print(tapGesture)
+       
         sceneView.addGestureRecognizer(tapGesture)
         
         // Alexa
@@ -85,7 +93,7 @@ class ViewController: UIViewController,AVAudioPlayerDelegate, AVAudioRecorderDel
         if self.imageNodes.count > 0 {
         self.imageNodes[self.imageNodes.count-1].removeFromParentNode()
         }
-        self.chompPlayer?.play()
+        self.soundPlayer?.play()
         // Get 2D position of touch event on screen
         let touchPosition = gesture.location(in: sceneView)
         
@@ -421,10 +429,14 @@ class ViewController: UIViewController,AVAudioPlayerDelegate, AVAudioRecorderDel
                     self.audioPlayer.delegate = self
                     self.audioPlayer.prepareToPlay()
                     self.audioPlayer.play()
+                    self.avsClient.sendGUIPostRequest()
+                    
                 } catch let ex {
                     print("Audio player has an error: \(ex.localizedDescription)")
                 }
             }
         }
+        
     }
+    
 }

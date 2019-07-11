@@ -2,8 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>NSCameraUsageDescription</key>
-	<string>This application will use the camera for Augmented Reality.</string>
 	<key>APIKey</key>
 	<string>eyJhbGciOiJSU0EtU0hBMjU2IiwidmVyIjoiMSJ9.eyJ2ZXIiOiIzIiwiZW5kcG9pbnRzIjp7ImF1dGh6IjoiaHR0cHM6Ly93d3cuYW1hem9uLmNvbS9hcC9vYSIsInRva2VuRXhjaGFuZ2UiOiJodHRwczovL2FwaS5hbWF6b24uY29tL2F1dGgvbzIvdG9rZW4ifSwiY2xpZW50SWQiOiJhbXpuMS5hcHBsaWNhdGlvbi1vYTItY2xpZW50LjRlNDMzYzNmYTE5ZjQ3ODA4MDI4OTVhNDE1ZTZhOWJhIiwiYXBwRmFtaWx5SWQiOiJhbXpuMS5hcHBsaWNhdGlvbi4yNGQyYmNlOTQ0NGY0ZWY1YTgwOTQ0NjUzZmU1YzQ1ZSIsImJ1bmRsZVNlZWRJZCI6InNoaXlpbmcwNi5BbGV4YWlPU0FwcCIsImJ1bmRsZUlkIjoic2hpeWluZzA2LkFsZXhhaU9TQXBwIiwiaXNzIjoiQW1hem9uIiwidHlwZSI6IkFQSUtleSIsImFwcFZhcmlhbnRJZCI6ImFtem4xLmFwcGxpY2F0aW9uLWNsaWVudC4wY2ZkYjA3NDQ0ODA0YzZhODc0N2ZlODBlYjMyZThkYyIsInRydXN0UG9vbCI6bnVsbCwiYXBwSWQiOiJhbXpuMS5hcHBsaWNhdGlvbi1jbGllbnQuMGNmZGIwNzQ0NDgwNGM2YTg3NDdmZTgwZWIzMmU4ZGMiLCJpZCI6IjNkZTRiNWY0LWU2ZmMtNDhjNi04NmJmLWZjMjRlOGFiMDI1YSIsImlhdCI6IjE1NjI4MDEwNDQ0MjUifQ==.L/fclsdEiT37wImmDfyWMe+GKAOyZ75pqAEf6ssDnxOCngWbtorWt+dWakrTdgb9YANtq3nltkzVmheHE+i1jQVPnNWd1GG23l8tkPAndcMdEoIBba/dl2siCvKPmiLXshnUuJqVGMOx5ZtDDhraob4gtq1qqYg+aaEzVCfxtXuyryhfpqhM/zlHLN1lBjKVVwiL1X0JMnXPUmQAtxlNcO71wnAzfL2R2G35u4nJZJjYqDLTUkbzEdKhzuH8rl8qSSoH364hVVuWTHAve1DQHPeV/u62Hqzk1aEN0ZxlLWyorf/ufwzdM9eAEg+zgSdCqTKCqOF0KW8p5fIrdr/GMg==</string>
 	<key>CFBundleDevelopmentRegion</key>
@@ -37,6 +35,8 @@
 	<string>1</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>This application will use the camera for Augmented Reality.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Audio input for Alexa</string>
 	<key>UILaunchStoryboardName</key>
