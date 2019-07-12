@@ -119,6 +119,7 @@
 		045773A61E4FB25900A5F558 /* AlexaiOSApp */ = {
 			isa = PBXGroup;
 			children = (
+				4B241DD422D7E9BA007318CE /* 05.png */,
 				4B241DCB22D7E8BB007318CE /* resources */,
 				4B241DCA22D7D302007318CE /* chomp.caf */,
 				96838D4D22D7B02500EB8277 /* chair_swan.usdz */,
@@ -173,7 +174,6 @@
 		4B241DCB22D7E8BB007318CE /* resources */ = {
 			isa = PBXGroup;
 			children = (
-				4B241DD422D7E9BA007318CE /* 05.png */,
 				4B241DCF22D7E936007318CE /* 01.png */,
 				4B241DCE22D7E935007318CE /* 02.png */,
 				4B241DCD22D7E935007318CE /* 04.png */,
@@ -214,7 +214,7 @@
 				TargetAttributes = {
 					045773A31E4FB25900A5F558 = {
 						CreatedOnToolsVersion = 8.2.1;
-						DevelopmentTeam = 8VXZ74L4BY;
+						DevelopmentTeam = K84HTAKXA4;
 						LastSwiftMigration = 0920;
 						ProvisioningStyle = Automatic;
 					};
@@ -332,9 +332,10 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: shiying06@gmail.com (JN8VVD74TF)";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = K84HTAKXA4;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -390,9 +391,10 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: shiying06@gmail.com (JN8VVD74TF)";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = K84HTAKXA4;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -420,7 +422,7 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = 8VXZ74L4BY;
+				DEVELOPMENT_TEAM = K84HTAKXA4;
 				ENABLE_BITCODE = NO;
 				EXCLUDED_RECURSIVE_SEARCH_PATH_SUBDIRECTORIES = "*.nib *.lproj *.framework *.gch *.xcode* *.xcassets (*) .DS_Store CVS .svn .git .hg *.pbproj *.pbxproj";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -443,7 +445,7 @@
 					"$(PROJECT_DIR)/../",
 					"$(PROJECT_DIR)/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "shiying06.AlexaiOSApp-1";
+				PRODUCT_BUNDLE_IDENTIFIER = shiying06.AlexaiOSApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = YES;
 				SWIFT_INCLUDE_PATHS = "";
@@ -466,7 +468,7 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = 8VXZ74L4BY;
+				DEVELOPMENT_TEAM = K84HTAKXA4;
 				ENABLE_BITCODE = NO;
 				EXCLUDED_RECURSIVE_SEARCH_PATH_SUBDIRECTORIES = "*.nib *.lproj *.framework *.gch *.xcode* *.xcassets (*) .DS_Store CVS .svn .git .hg *.pbproj *.pbxproj";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -489,7 +491,7 @@
 					"$(PROJECT_DIR)/../",
 					"$(PROJECT_DIR)/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "shiying06.AlexaiOSApp-1";
+				PRODUCT_BUNDLE_IDENTIFIER = shiying06.AlexaiOSApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = YES;
 				SWIFT_INCLUDE_PATHS = "";

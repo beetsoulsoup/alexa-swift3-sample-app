@@ -63,7 +63,7 @@ class ViewController: UIViewController,AVAudioPlayerDelegate, AVAudioRecorderDel
         sceneView.debugOptions = ARSCNDebugOptions.showFeaturePoints
         let scene = SCNScene()
         sceneView.scene = scene
-        self.soundPlayer = self.loadSound(filename: "chomp")
+        //self.soundPlayer = self.loadSound(filename: "chomp")
         /**
         let welcomeText = SKLabelNode(fontNamed:"Chalkduster")
         welcomeText.text = "Welcome to ARlexa!"
@@ -173,7 +173,7 @@ class ViewController: UIViewController,AVAudioPlayerDelegate, AVAudioRecorderDel
         nameLabel.textAlignment = .center
         nameLabel.backgroundColor = .lightGray
         nameLabel.textColor = .white
-        nameLabel.font = UIFont.boldSystemFont(ofSize: 40)
+        nameLabel.font = UIFont.boldSystemFont(ofSize: 20)
         nameLabel.text = name
         UIGraphicsBeginImageContext(frame.size)
         if let currentContext = UIGraphicsGetCurrentContext() {
@@ -190,12 +190,20 @@ class ViewController: UIViewController,AVAudioPlayerDelegate, AVAudioRecorderDel
         //fetch image from url
         
         var bottomImage:UIImage!
-        if let url = NSURL(string: "https://i5.wal.co/asr/07d325dc-fb42-4bf6-8f4f-2216c8f212d3_1.f37c57e8e7f730446d61017c1ed7e666.jpeg-31135b62c2c5bb63013bceff884c88ac42f3ee5d-optim-180x180.jpg") {
+        /**if let url = NSURL(string: "https://i5.wal.co/asr/07d325dc-fb42-4bf6-8f4f-2216c8f212d3_1.f37c57e8e7f730446d61017c1ed7e666.jpeg-31135b62c2c5bb63013bceff884c88ac42f3ee5d-optim-180x180.jpg") {
             if let data = NSData(contentsOf: url as URL) {
                 bottomImage = UIImage(data: data as Data)
             }
+        }**/
+        if let url = Bundle.main.url(forResource: "05", withExtension: "png") {
+            
+            let data = try? Data(contentsOf: url)
+            if let imageData = data {
+                bottomImage = UIImage(data: imageData)
+            }
         }
-        let topImage = imageWith(name: "Text")
+        
+        let topImage = imageWith(name: "Weather")
         
         
         let size = CGSize(width: topImage!.size.width, height: topImage!.size.height + bottomImage!.size.height)
@@ -242,6 +250,51 @@ class ViewController: UIViewController,AVAudioPlayerDelegate, AVAudioRecorderDel
         
     }
     
+    func addItemToPositionCGP(_ touchCoordinates: CGPoint) {
+        //let scene = SCNScene(named: "art.scnassets/1.jpg")
+        //let image = imageWith(name: "Text")
+        //fetch image from url
+        
+        var bottomImage:UIImage!
+        /**if let url = NSURL(string: "https://i5.wal.co/asr/07d325dc-fb42-4bf6-8f4f-2216c8f212d3_1.f37c57e8e7f730446d61017c1ed7e666.jpeg-31135b62c2c5bb63013bceff884c88ac42f3ee5d-optim-180x180.jpg") {
+         if let data = NSData(contentsOf: url as URL) {
+         bottomImage = UIImage(data: data as Data)
+         }
+         }**/
+        if let url = Bundle.main.url(forResource: "05", withExtension: "png") {
+            
+            let data = try? Data(contentsOf: url)
+            if let imageData = data {
+                bottomImage = UIImage(data: imageData)
+            }
+        }
+        
+        let topImage = imageWith(name: "Weather")
+        
+        
+        let size = CGSize(width: topImage!.size.width, height: topImage!.size.height + bottomImage!.size.height)
+        UIGraphicsBeginImageContextWithOptions(size, false, 0.0)
+        
+        topImage!.draw(in: CGRect(x: 0, y: 0, width: size.width, height: topImage!.size.height))
+        bottomImage!.draw(in: CGRect(x: 0, y: topImage!.size.height, width: size.width, height: bottomImage!.size.height))
+        
+        let newImage:UIImage = UIGraphicsGetImageFromCurrentImageContext()!
+        UIGraphicsEndImageContext()
+        
+        DispatchQueue.main.async {
+            self.imageURL = UIImageView(image: newImage)
+            self.imageURL.frame = CGRect(x: touchCoordinates.x, y: touchCoordinates.y, width: 100, height: 100)
+            //delete previous image
+            let previous = self.view.subviews
+            if(previous.count > 1) {
+                let lastView = previous[previous.count-1]
+                lastView.removeFromSuperview()
+            }
+            self.view.addSubview(self.imageURL)
+            
+        }
+    }
+    
     @objc
     func didTap(_ gesture: UITapGestureRecognizer) {
         let sceneViewTappedOn = gesture.view as! ARSCNView
@@ -268,7 +321,7 @@ class ViewController: UIViewController,AVAudioPlayerDelegate, AVAudioRecorderDel
         let configuration = ARWorldTrackingConfiguration()
         
         // Enable horizontal plane detection
-        configuration.planeDetection = .horizontal
+        configuration.planeDetection = .vertical
         
         // show Feature Points
         sceneView.debugOptions = [ARSCNDebugOptions.showFeaturePoints]
@@ -376,7 +429,7 @@ class ViewController: UIViewController,AVAudioPlayerDelegate, AVAudioRecorderDel
         if let cnt = buffer?.frameLength {
             array = Array(UnsafeBufferPointer(start: buffer?.floatChannelData![0], count: Int(cnt)))
         } else {
-            array = Array(UnsafeBufferPointer(start: buffer?.floatChannelData![0], count: Int(20000)))
+            array = Array(UnsafeBufferPointer(start: buffer?.floatChannelData![0], count: Int(200)))
         }
         
         var result:Int32 = 0
@@ -496,8 +549,14 @@ class ViewController: UIViewController,AVAudioPlayerDelegate, AVAudioRecorderDel
                     try self.audioPlayer = AVAudioPlayer(data: directive.data)
                     self.audioPlayer.delegate = self
                     self.audioPlayer.prepareToPlay()
+                    
                     self.audioPlayer.play()
-                    self.avsClient.sendGUIPostRequest()
+                    print("print x and Y")
+                    
+                    addItemToPositionCGP(CGPoint.init(x: self.sceneView.frame.midX, y: self.sceneView.frame.midY))
+                    print(self.sceneView.frame.midX)
+                    print(self.sceneView.frame.midY)
+                    //self.avsClient.sendGUIPostRequest()
                     
                 } catch let ex {
                     print("Audio player has an error: \(ex.localizedDescription)")
