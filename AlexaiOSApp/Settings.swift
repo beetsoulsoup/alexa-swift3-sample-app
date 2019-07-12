@@ -10,7 +10,7 @@ import AVFoundation
 struct Settings {
     
     struct Credentials {
-        static let APPLICATION_TYPE_ID = "AlexaARVoiceIntegration_Hackathon"
+        static let APPLICATION_TYPE_ID = "AlexaIOSAppAR"
         static let DSN = "12345"
         
         static let SCOPES = ["alexa:all"]
@@ -33,7 +33,7 @@ struct Settings {
         
         static let RESOURCE = Bundle.main.path(forResource: "common", ofType: "res")
         static let MODEL = Bundle.main.path(forResource: "alexa_02092017", ofType: "umdl")
-        static let SENSITIVITY = "0.5"
+        static let SENSITIVITY = "10"
         static let AUDIO_GAIN = 1.0 as Float
         static let TEMP_FILE_NAME = "snowboy.wav"
     }

@@ -8,6 +8,7 @@
 //
 
 import Foundation
+import Speech
 
 struct DirectiveData {
     var contentType: String

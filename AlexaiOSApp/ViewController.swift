@@ -11,6 +11,7 @@ import SceneKit
 import ARKit
 import AVFoundation
 import SceneKit.ModelIO
+import Speech
 
 class ViewController: UIViewController,AVAudioPlayerDelegate, AVAudioRecorderDelegate, ARSCNViewDelegate {
 
@@ -30,12 +31,31 @@ class ViewController: UIViewController,AVAudioPlayerDelegate, AVAudioRecorderDel
     private var stopCaptureTimer: Timer!
     
     private var imageURL:UIImageView!
-
+    private var responses = [String]()
     
     var grids = [Grid]()
     //var chompPlayer:AVAudioPlayer? = nil
     var imageNodes = [SCNNode]()
     
+    func getDocumentsDirectory() -> URL {
+        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        print("Returning URL")
+        print(paths[0])
+        return paths[0]
+    }
+    func dataFilePath(data:Data) -> Void {
+        print("In audio saver")
+        //let fileURL = Bundle.main.url(forResource: "saved", withExtension:"wav")
+        let filename = getDocumentsDirectory().appendingPathComponent("output.wav")
+
+        do {
+            try data.write(to: filename, options: .atomic)
+            convertToText(audioURL: filename.absoluteURL)
+        } catch {
+             print("In audio saver error")
+            print(error)
+        }
+    }
     
     /* Load sound from file */
     func loadSound(filename: String) -> AVAudioPlayer {
@@ -95,7 +115,7 @@ class ViewController: UIViewController,AVAudioPlayerDelegate, AVAudioRecorderDel
         if self.imageNodes.count > 0 {
         self.imageNodes[self.imageNodes.count-1].removeFromParentNode()
         }
-        self.soundPlayer?.play()
+        //self.soundPlayer?.play()
         // Get 2D position of touch event on screen
         let touchPosition = gesture.location(in: sceneView)
         
@@ -138,33 +158,7 @@ class ViewController: UIViewController,AVAudioPlayerDelegate, AVAudioRecorderDel
         grid.removeFromParentNode()
         return paintingNode
     }
-    /**
-    @objc
-    func tapped(_ gesture: UITapGestureRecognizer) {
-        guard let currentFrame = self.sceneView.session.currentFrame else {
-            return
-        }
-        
-        // create a web view
-        let webView = UIWebView(frame: CGRect(x: 0, y: 0, width: 640, height: 480))
-        let request = URLRequest(url: URL(string: "http://www.youtube.com")!)
-        
-        webView.loadRequest(request)
-        let tvPlane = SCNPlane(width: 1.0, height: 0.75)
-        tvPlane.firstMaterial?.diffuse.contents = webView
-        tvPlane.firstMaterial?.isDoubleSided = true
-        
-        let tvPlaneNode = SCNNode(geometry: tvPlane)
-        
-        var translation = matrix_identity_float4x4
-        translation.columns.3.z = -1.0
-        
-        tvPlaneNode.simdTransform = matrix_multiply(currentFrame.camera.transform, translation)
-        tvPlaneNode.eulerAngles = SCNVector3(0,0,0)
-        
-        self.sceneView.scene.rootNode.addChildNode(tvPlaneNode)
-    }**/
-    
+  
     //Add text string
     func imageWith(name: String?) -> UIImage? {
         
@@ -312,7 +306,15 @@ class ViewController: UIViewController,AVAudioPlayerDelegate, AVAudioRecorderDel
         addItemToPosition(position, touchCoordinates)
     }
     
-   
+    /**
+    if let url = Bundle.main.url(forResource: "amazon-alexa-logo-png-10", withExtension: "png") {
+        let data = try? Data(contentsOf: url)
+        if let imageData = data {
+            bottomImage = UIImage(data: imageData)
+        }
+    }
+    let topImage = imageWith(name: "Welcome to ARAlexa")
+ **/
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -328,6 +330,7 @@ class ViewController: UIViewController,AVAudioPlayerDelegate, AVAudioRecorderDel
         
         // Run the view's session
         sceneView.session.run(configuration)
+        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -445,6 +448,7 @@ class ViewController: UIViewController,AVAudioPlayerDelegate, AVAudioRecorderDel
         if (result == 1) {
             DispatchQueue.main.async { () -> Void in
                 print("Alexa is listening")
+                self.view.subviews[self.view.subviews.count-1].removeFromSuperview()
             }
             
             prepareAudioSession()
@@ -547,6 +551,7 @@ class ViewController: UIViewController,AVAudioPlayerDelegate, AVAudioRecorderDel
                     
                     try audioSession.setCategory(AVAudioSessionCategoryPlayAndRecord, with:[AVAudioSessionCategoryOptions.allowBluetooth, AVAudioSessionCategoryOptions.allowBluetoothA2DP])
                     try self.audioPlayer = AVAudioPlayer(data: directive.data)
+                    //AudioFileWriteBytes(audioFile, false, 0, directive.data, 20)
                     self.audioPlayer.delegate = self
                     self.audioPlayer.prepareToPlay()
                     
@@ -554,9 +559,12 @@ class ViewController: UIViewController,AVAudioPlayerDelegate, AVAudioRecorderDel
                     print("print x and Y")
                     
                     addItemToPositionCGP(CGPoint.init(x: self.sceneView.frame.midX, y: self.sceneView.frame.midY))
-                    print(self.sceneView.frame.midX)
-                    print(self.sceneView.frame.midY)
                     //self.avsClient.sendGUIPostRequest()
+                
+                    /**DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) { // Change `2.0` to the desired number of seconds.
+                        // Code you want to be delayed
+                    }**/
+                    dataFilePath(data: self.audioPlayer.data!)
                     
                 } catch let ex {
                     print("Audio player has an error: \(ex.localizedDescription)")
@@ -566,4 +574,42 @@ class ViewController: UIViewController,AVAudioPlayerDelegate, AVAudioRecorderDel
         
     }
     
+    func getLabelText(labelText:String)-> Void {
+        
+        let label = UILabel(frame: CGRect(x: 0, y: 0, width: 300, height: 300))
+        label.center = CGPoint(x: 160, y: 260)
+        label.lineBreakMode = .byWordWrapping
+        label.numberOfLines = 0
+        label.textAlignment = .center
+        label.text = labelText
+        label.textColor = UIColor.black
+        
+        label.font = UIFont(name: "HelveticaNeue", size: CGFloat(22))
+        //label.adjustsFontSizeToFitWidth = true
+        self.view.addSubview(label)
+        
+    }
+    
+    func convertToText(audioURL:URL)-> Void {
+        SFSpeechRecognizer.requestAuthorization { authStatus in
+            if authStatus == SFSpeechRecognizerAuthorizationStatus.authorized {
+        //let audioURL = Bundle.main.url(forResource: "swvader03", withExtension: "wav")
+        print("Converting to text")
+        let recognizer = SFSpeechRecognizer(locale: Locale(identifier: "en-US"))
+        let request = SFSpeechURLRecognitionRequest(url: audioURL)
+        request.shouldReportPartialResults = false
+    
+        if (recognizer?.isAvailable)! {
+        recognizer?.recognitionTask(with: request) { result, error in
+        guard error == nil else { print("Error: \(error!)"); return }
+        guard let result = result else { print("No result!"); return }
+        print(result.bestTranscription.formattedString)
+        self.responses.append(result.bestTranscription.formattedString)
+        self.getLabelText(labelText: self.responses[self.responses.count-1])
+        }
+        } else {
+        print("Device doesn't support speech recognition")}}
+        }
+    }
+
 }
